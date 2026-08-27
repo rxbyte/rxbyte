@@ -92,39 +92,6 @@ philosophy:
 
 ---
 
-## `> github_stats`
-
-<div align="center">
-
-<a href="https://github.com/rxbyte">
-  <img height="180" src="https://github-readme-stats.vercel.app/api?username=rxbyte&show_icons=true&hide_border=true&bg_color=0D1117&title_color=58A6FF&text_color=C9D1D9&icon_color=58A6FF&include_all_commits=true&count_private=true" alt="rxbyte GitHub stats">
-</a>
-<a href="https://github.com/rxbyte">
-  <img height="180" src="https://github-readme-stats.vercel.app/api/top-langs/?username=rxbyte&layout=compact&hide_border=true&bg_color=0D1117&title_color=58A6FF&text_color=C9D1D9&langs_count=8" alt="Top languages">
-</a>
-
-<br><br>
-
-<img src="https://github-readme-streak-stats.herokuapp.com/?user=rxbyte&theme=dark&hide_border=true&background=0D1117&ring=58A6FF&fire=58A6FF&currStreakLabel=58A6FF" alt="GitHub contribution streak">
-
-<br><br>
-
-<img src="https://github-profile-trophy.vercel.app/?username=rxbyte&theme=darkhub&no-frame=true&no-bg=true&margin-w=8&column=7" alt="GitHub trophies">
-
-</div>
-
----
-
-## `> activity`
-
-<div align="center">
-
-<img src="https://github-readme-activity-graph.vercel.app/graph?username=rxbyte&bg_color=0D1117&color=C9D1D9&line=58A6FF&point=FFFFFF&area=true&hide_border=true" alt="GitHub activity graph">
-
-</div>
-
----
-
 ## `> connect`
 
 ```text
