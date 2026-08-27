@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="night">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>rxbyte — Developer Portfolio</title>
+    <meta name="description" content="rxbyte — Software engineer, open-source developer and low-level programmer.">
+
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- DaisyUI -->
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@3.9.4/dist/full.css" rel="stylesheet">
+
+    <!-- Three.js -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+
+    <!-- Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Space Grotesk', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
+                    },
+                    colors: {
+                        rx: {
+                            blue: '#3b82f6',
+                            cyan: '#60a5fa'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        * {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: #05070a;
+            color: #f5f7fa;
+            overflow-x: hidden;
+        }
+
+        #three-bg {
+            position: fixed;
+            inset: 0;
+            z-index: -10;
+        }
+
+        .overlay {
+            position: fixed;
+            inset: 0;
+            z-index: -9;
+            pointer-events: none;
+            background:
+                radial-gradient(
+                    circle at 50% 30%,
+                    rgba(37, 99, 235, 0.08),
+                    transparent 35%
+                ),
+                linear-gradient(
+                    rgba(5, 7, 10, 0.72),
+                    rgba(5, 7, 10, 0.92)
+                );
+        }
+
+        .grid-bg {
+            background-image:
+                linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+            background-size: 45px 45px;
+            mask-image: linear-gradient(to bottom, black, transparent 90%);
+        }
+
+        .glass {
+            background: rgba(10, 13, 18, .65);
+            border: 1px solid rgba(255,255,255,.07);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+        }
+
+        .glass-hover {
+            transition: .25s ease;
+        }
+
+        .glass-hover:hover {
+            border-color: rgba(59,130,246,.35);
+            background: rgba(12,17,25,.78);
+            transform: translateY(-4px);
+            box-shadow:
+                0 20px 60px rgba(0,0,0,.35),
+                0 0 35px rgba(37,99,235,.06);
+        }
+
+        .blue-glow {
+            text-shadow:
+                0 0 25px rgba(59,130,246,.35);
+        }
+
+        .rx-symbol {
+            position: relative;
+            width: 42px;
+            height: 42px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: monospace;
+            font-weight: 700;
+            font-size: 18px;
+            letter-spacing: -4px;
+            color: white;
+        }
+
+        .rx-symbol::before,
+        .rx-symbol::after {
+            content: "";
+            position: absolute;
+            width: 7px;
+            height: 7px;
+            border-color: #3b82f6;
+        }
+
+        .rx-symbol::before {
+            top: 0;
+            left: 0;
+            border-top: 2px solid;
+            border-left: 2px solid;
+        }
+
+        .rx-symbol::after {
+            right: 0;
+            bottom: 0;
+            border-right: 2px solid;
+            border-bottom: 2px solid;
+        }
+
+        .terminal-line::before {
+            content: ">";
+            color: #3b82f6;
+            margin-right: 8px;
+        }
+
+        .status-dot {
+            width: 7px;
+            height: 7px;
+            background: #3b82f6;
+            border-radius: 50%;
+            box-shadow: 0 0 12px #3b82f6;
+        }
+
+        .line {
+            height: 1px;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(59,130,246,.45),
+                transparent
+            );
+        }
+
+        .tech-tag {
+            transition: .2s ease;
+        }
+
+        .tech-tag:hover {
+            border-color: rgba(59,130,246,.5);
+            color: #93c5fd;
+            transform: translateY(-2px);
+        }
+
+        .project-number {
+            color: rgba(255,255,255,.18);
+            font-family: 'JetBrains Mono';
+            font-size: 12px;
+        }
+
+        ::selection {
+            background: #2563eb;
+            color: white;
+        }
+    </style>
+</head>
+
+<body class="font-sans">
+
+    <!-- THREE.JS -->
+    <canvas id="three-bg"></canvas>
+    <div class="overlay"></div>
+
+    <!-- GRID -->
+    <div class="fixed inset-0 grid-bg pointer-events-none z-[-8]"></div>
+
+    <!-- NAVBAR -->
+    <header class="fixed top-0 left-0 right-0 z-50">
+        <div class="max-w-6xl mx-auto px-6 pt-5">
+
+            <nav class="glass rounded-2xl px-5 py-3 flex items-center justify-between">
+
+                <a href="#" class="flex items-center gap-3 group">
+                    <div class="rx-symbol">
+                        R<span class="text-blue-500">X</span>
+                    </div>
+
+                    <span class="font-semibold tracking-tight text-lg">
+                        rx<span class="text-blue-500">byte</span>
+                    </span>
+                </a>
+
+                <div class="hidden md:flex items-center gap-7 text-sm text-gray-400">
+                    <a href="#about" class="hover:text-white transition">about</a>
+                    <a href="#stack" class="hover:text-white transition">stack</a>
+                    <a href="#projects" class="hover:text-white transition">projects</a>
+                    <a href="#contact" class="hover:text-white transition">contact</a>
+                </div>
+
+                <a
+                    href="https://github.com/"
+                    target="_blank"
+                    class="btn btn-sm bg-white text-black hover:bg-blue-500 hover:text-white border-none rounded-xl px-4"
+                >
+                    GitHub
+                </a>
+
+            </nav>
+        </div>
+    </header>
+
+
+    <!-- HERO -->
+    <main>
+
+        <section class="min-h-screen flex items-center pt-28">
+
+            <div class="max-w-6xl mx-auto px-6 w-full">
+
+                <div class="max-w-4xl">
+
+                    <div class="flex items-center gap-3 mb-7">
+
+                        <div class="status-dot"></div>
+
+                        <span class="font-mono text-xs text-gray-400 tracking-widest uppercase">
+                            available for opportunities
+                        </span>
+
+                    </div>
+
+                    <p class="font-mono text-sm text-blue-400 mb-4">
+                        ~/rxbyte $ whoami
+                    </p>
+
+                    <h1 class="text-6xl sm:text-7xl md:text-8xl font-semibold tracking-[-0.06em] leading-[.9]">
+                        software
+                        <br>
+                        <span class="text-gray-500">engineer.</span>
+                    </h1>
+
+                    <p class="mt-8 text-gray-400 text-lg md:text-xl max-w-2xl leading-relaxed">
+                        Developer focused on building reliable software,
+                        APIs, low-level systems and open-source projects.
+                        Turning ideas into clean, efficient code.
+                    </p>
+
+                    <div class="flex flex-wrap gap-3 mt-9">
+
+                        <a
+                            href="#projects"
+                            class="btn bg-blue-600 hover:bg-blue-500 border-none text-white rounded-xl px-6"
+                        >
+                            View projects
+                        </a>
+
+                        <a
+                            href="#contact"
+                            class="btn btn-outline border-white/10 hover:border-blue-500 hover:bg-blue-500/10 rounded-xl px-6"
+                        >
+                            Get in touch
+                        </a>
+
+                    </div>
+
+                    <div class="flex flex-wrap gap-3 mt-12">
+
+                        <span class="badge badge-outline border-white/10 text-gray-400 font-mono py-3">
+                            Node.js
+                        </span>
+
+                        <span class="badge badge-outline border-white/10 text-gray-400 font-mono py-3">
+                            TypeScript
+                        </span>
+
+                        <span class="badge badge-outline border-white/10 text-gray-400 font-mono py-3">
+                            Rust
+                        </span>
+
+                        <span class="badge badge-outline border-white/10 text-gray-400 font-mono py-3">
+                            Linux
+                        </span>
+
+                        <span class="badge badge-outline border-white/10 text-gray-400 font-mono py-3">
+                            Docker
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ABOUT -->
+        <section id="about" class="py-32">
+
+            <div class="max-w-6xl mx-auto px-6">
+
+                <div class="grid md:grid-cols-[1fr_2fr] gap-16">
+
+                    <div>
+                        <p class="font-mono text-blue-500 text-xs uppercase tracking-widest">
+                            01 / about
+                        </p>
+
+                        <h2 class="text-4xl font-semibold mt-4 tracking-tight">
+                            Building beneath
+                            <span class="text-gray-500">the surface.</span>
+                        </h2>
+                    </div>
+
+                    <div class="text-gray-400 text-lg leading-relaxed">
+
+                        <p>
+                            I'm a developer interested in how software actually works.
+                            From modern web applications and APIs to Linux,
+                            automation and lower-level programming.
+                        </p>
+
+                        <p class="mt-6">
+                            I enjoy creating tools that solve real problems,
+                            experimenting with new technologies and contributing
+                            to open-source projects.
+                        </p>
+
+                        <div class="line my-10"></div>
+
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+
+                            <div>
+                                <div class="text-3xl text-white font-semibold">08+</div>
+                                <div class="text-xs font-mono text-gray-500 mt-2">
+                                    YEARS CODING
+                                </div>
+                            </div>
+
+                            <div>
+                                <div class="text-3xl text-white font-semibold">∞</div>
+                                <div class="text-xs font-mono text-gray-500 mt-2">
+                                    IDEAS
+                                </div>
+                            </div>
+
+                            <div>
+                                <div class="text-3xl text-white font-semibold">24/7</div>
+                                <div class="text-xs font-mono text-gray-500 mt-2">
+                                    CURIOUS
+                                </div>
+                            </div>
+
+                            <div>
+                                <div class="text-3xl text-white font-semibold">OSS</div>
+                                <div class="text-xs font-mono text-gray-500 mt-2">
+                                    FOCUSED
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- STACK -->
+        <section id="stack" class="py-32">
+
+            <div class="max-w-6xl mx-auto px-6">
+
+                <div class="mb-14">
+
+                    <p class="font-mono text-blue-500 text-xs uppercase tracking-widest">
+                        02 / stack
+                    </p>
+
+                    <h2 class="text-4xl font-semibold mt-4 tracking-tight">
+                        Tools of the trade.
+                    </h2>
+
+                    <p class="text-gray-500 mt-4 max-w-xl">
+                        Technologies I use to build, deploy and maintain software.
+                    </p>
+
+                </div>
+
+                <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+
+                    <div class="glass glass-hover rounded-2xl p-6">
+                        <div class="text-blue-500 font-mono text-sm mb-8">01</div>
+                        <h3 class="text-xl font-semibold">Languages</h3>
+                        <div class="flex flex-wrap gap-2 mt-5">
+                            <span class="badge badge-outline border-white/10">JavaScript</span>
+                            <span class="badge badge-outline border-white/10">TypeScript</span>
+                            <span class="badge badge-outline border-white/10">Python</span>
+                            <span class="badge badge-outline border-white/10">Rust</span>
+                            <span class="badge badge-outline border-white/10">Lua</span>
+                        </div>
+                    </div>
+
+                    <div class="glass glass-hover rounded-2xl p-6">
+                        <div class="text-blue-500 font-mono text-sm mb-8">02</div>
+                        <h3 class="text-xl font-semibold">Web</h3>
+                        <div class="flex flex-wrap gap-2 mt-5">
+                            <span class="badge badge-outline border-white/10">React</span>
+                            <span class="badge badge-outline border-white/10">Node.js</span>
+                            <span class="badge badge-outline border-white/10">HTML</span>
+                            <span class="badge badge-outline border-white/10">CSS</span>
+                            <span class="badge badge-outline border-white/10">REST</span>
+                        </div>
+                    </div>
+
+                    <div class="glass glass-hover rounded-2xl p-6">
+                        <div class="text-blue-500 font-mono text-sm mb-8">03</div>
+                        <h3 class="text-xl font-semibold">Systems</h3>
+                        <div class="flex flex-wrap gap-2 mt-5">
+                            <span class="badge badge-outline border-white/10">Linux</span>
+                            <span class="badge badge-outline border-white/10">Docker</span>
+                            <span class="badge badge-outline border-white/10">Nginx</span>
+                            <span class="badge badge-outline border-white/10">Git</span>
+                        </div>
+                    </div>
+
+                    <div class="glass glass-hover rounded-2xl p-6">
+                        <div class="text-blue-500 font-mono text-sm mb-8">04</div>
+                        <h3 class="text-xl font-semibold">Focus</h3>
+                        <div class="flex flex-wrap gap-2 mt-5">
+                            <span class="badge badge-outline border-white/10">APIs</span>
+                            <span class="badge badge-outline border-white/10">Automation</span>
+                            <span class="badge badge-outline border-white/10">Open Source</span>
+                            <span class="badge badge-outline border-white/10">AI</span>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- PROJECTS -->
+        <section id="projects" class="py-32">
+
+            <div class="max-w-6xl mx-auto px-6">
+
+                <div class="mb-14">
+
+                    <p class="font-mono text-blue-500 text-xs uppercase tracking-widest">
+                        03 / projects
+                    </p>
+
+                    <h2 class="text-4xl font-semibold mt-4 tracking-tight">
+                        Things I've built.
+                    </h2>
+
+                </div>
+
+
+                <div class="space-y-4">
+
+                    <!-- PROJECT -->
+                    <a
+                        href="#"
+                        class="glass glass-hover rounded-2xl p-6 md:p-8 block"
+                    >
+
+                        <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+
+                            <div class="flex gap-5">
+
+                                <span class="project-number mt-1">
+                                    001
+                                </span>
+
+                                <div>
+                                    <h3 class="text-2xl font-semibold">
+                                        Hostio
+                                    </h3>
+
+                                    <p class="text-gray-500 mt-2 max-w-xl">
+                                        Modern hosting infrastructure and developer
+                                        tools designed for simple deployment.
+                                    </p>
+                                </div>
+
+                            </div>
+
+                            <div class="flex flex-wrap gap-2 md:justify-end">
+                                <span class="badge badge-outline border-white/10">Node.js</span>
+                                <span class="badge badge-outline border-white/10">Docker</span>
+                                <span class="badge badge-outline border-white/10">Linux</span>
+                            </div>
+
+                        </div>
+
+                    </a>
+
+
+                    <!-- PROJECT -->
+                    <a
+                        href="#"
+                        class="glass glass-hover rounded-2xl p-6 md:p-8 block"
+                    >
+
+                        <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+
+                            <div class="flex gap-5">
+
+                                <span class="project-number mt-1">
+                                    002
+                                </span>
+
+                                <div>
+                                    <h3 class="text-2xl font-semibold">
+                                        HostioChat
+                                    </h3>
+
+                                    <p class="text-gray-500 mt-2 max-w-xl">
+                                        Real-time communication platform built
+                                        around a lightweight Node.js backend.
+                                    </p>
+                                </div>
+
+                            </div>
+
+                            <div class="flex flex-wrap gap-2 md:justify-end">
+                                <span class="badge badge-outline border-white/10">Node.js</span>
+                                <span class="badge badge-outline border-white/10">EJS</span>
+                                <span class="badge badge-outline border-white/10">API</span>
+                            </div>
+
+                        </div>
+
+                    </a>
+
+
+                    <!-- PROJECT -->
+                    <a
+                        href="#"
+                        class="glass glass-hover rounded-2xl p-6 md:p-8 block"
+                    >
+
+                        <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+
+                            <div class="flex gap-5">
+
+                                <span class="project-number mt-1">
+                                    003
+                                </span>
+
+                                <div>
+                                    <h3 class="text-2xl font-semibold">
+                                        DataStars
+                                    </h3>
+
+                                    <p class="text-gray-500 mt-2 max-w-xl">
+                                        Data-driven web platform consuming external
+                                        APIs and transforming raw data into useful interfaces.
+                                    </p>
+                                </div>
+
+                            </div>
+
+                            <div class="flex flex-wrap gap-2 md:justify-end">
+                                <span class="badge badge-outline border-white/10">JavaScript</span>
+                                <span class="badge badge-outline border-white/10">REST</span>
+                                <span class="badge badge-outline border-white/10">API</span>
+                            </div>
+
+                        </div>
+
+                    </a>
+
+
+                    <!-- PROJECT -->
+                    <a
+                        href="#"
+                        class="glass glass-hover rounded-2xl p-6 md:p-8 block"
+                    >
+
+                        <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+
+                            <div class="flex gap-5">
+
+                                <span class="project-number mt-1">
+                                    004
+                                </span>
+
+                                <div>
+                                    <h3 class="text-2xl font-semibold">
+                                        Open Source
+                                    </h3>
+
+                                    <p class="text-gray-500 mt-2 max-w-xl">
+                                        Various experiments, developer utilities,
+                                        automation tools and open-source projects.
+                                    </p>
+                                </div>
+
+                            </div>
+
+                            <div class="flex flex-wrap gap-2 md:justify-end">
+                                <span class="badge badge-outline border-white/10">Rust</span>
+                                <span class="badge badge-outline border-white/10">Python</span>
+                                <span class="badge badge-outline border-white/10">OSS</span>
+                            </div>
+
+                        </div>
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- TERMINAL -->
+        <section class="py-24">
+
+            <div class="max-w-4xl mx-auto px-6">
+
+                <div class="glass rounded-2xl overflow-hidden shadow-2xl">
+
+                    <div class="px-5 py-4 border-b border-white/5 flex items-center gap-2">
+
+                        <span class="w-3 h-3 rounded-full bg-red-500/70"></span>
+                        <span class="w-3 h-3 rounded-full bg-yellow-500/70"></span>
+                        <span class="w-3 h-3 rounded-full bg-green-500/70"></span>
+
+                        <span class="font-mono text-xs text-gray-600 ml-3">
+                            rxbyte@localhost
+                        </span>
+
+                    </div>
+
+                    <div class="p-6 font-mono text-sm leading-8 text-gray-400">
+
+                        <div>
+                            <span class="text-blue-500">rxbyte</span>
+                            <span class="text-gray-600">@</span>
+                            <span class="text-white">portfolio</span>
+                            <span class="text-gray-600">:</span>
+                            <span class="text-blue-400">~</span>
+                            <span class="text-gray-600">$</span>
+                            <span class="text-white ml-2">cat skills.txt</span>
+                        </div>
+
+                        <div class="mt-3 text-gray-500">
+                            Node.js · TypeScript · Rust · Python · Linux
+                            <br>
+                            APIs · Docker · Automation · Open Source · AI
+                        </div>
+
+                        <div class="mt-5">
+                            <span class="text-blue-500">rxbyte</span>
+                            <span class="text-gray-600">@</span>
+                            <span class="text-white">portfolio</span>
+                            <span class="text-gray-600">:</span>
+                            <span class="text-blue-400">~</span>
+                            <span class="text-gray-600">$</span>
+                            <span class="text-white ml-2 terminal-cursor">_</span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- CONTACT -->
+        <section id="contact" class="py-32">
+
+            <div class="max-w-6xl mx-auto px-6">
+
+                <div class="glass rounded-3xl p-8 md:p-16 text-center">
+
+                    <p class="font-mono text-blue-500 text-xs uppercase tracking-widest">
+                        04 / contact
+                    </p>
+
+                    <h2 class="text-5xl md:text-7xl font-semibold tracking-[-0.05em] mt-6">
+                        Let's build
+                        <span class="text-gray-500">something.</span>
+                    </h2>
+
+                    <p class="text-gray-500 max-w-xl mx-auto mt-6 text-lg">
+                        Open to interesting projects, collaborations,
+                        open-source work and developer opportunities.
+                    </p>
+
+                    <div class="flex justify-center flex-wrap gap-3 mt-9">
+
+                        <a
+                            href="mailto:hello@rxbyte.dev"
+                            class="btn bg-blue-600 hover:bg-blue-500 border-none rounded-xl px-7"
+                        >
+                            Email me
+                        </a>
+
+                        <a
+                            href="https://github.com/"
+                            target="_blank"
+                            class="btn btn-outline border-white/10 hover:border-blue-500 rounded-xl px-7"
+                        >
+                            GitHub
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- FOOTER -->
+    <footer class="border-t border-white/5">
+
+        <div class="max-w-6xl mx-auto px-6 py-8">
+
+            <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+
+                <div class="flex items-center gap-3">
+
+                    <div class="rx-symbol scale-75">
+                        R<span class="text-blue-500">X</span>
+                    </div>
+
+                    <span class="font-semibold">
+                        rx<span class="text-blue-500">byte</span>
+                    </span>
+
+                </div>
+
+                <div class="font-mono text-xs text-gray-600">
+                    © 2026 rxbyte · built with code
+                </div>
+
+            </div>
+
+        </div>
+
+    </footer>
+
+
+    <!-- THREE.JS -->
+    <script>
+
+        const canvas = document.getElementById("three-bg");
+
+        const scene = new THREE.Scene();
+
+        const camera = new THREE.PerspectiveCamera(
+            60,
+            window.innerWidth / window.innerHeight,
+            0.1,
+            1000
+        );
+
+        camera.position.z = 6;
+
+        const renderer = new THREE.WebGLRenderer({
+            canvas,
+            antialias: true,
+            alpha: true
+        });
+
+        renderer.setPixelRatio(
+            Math.min(window.devicePixelRatio, 2)
+        );
+
+        renderer.setSize(
+            window.innerWidth,
+            window.innerHeight
+        );
+
+
+        /*
+         * PARTICLES
+         */
+
+        const particleCount = 1800;
+
+        const positions = new Float32Array(
+            particleCount * 3
+        );
+
+        for (let i = 0; i < particleCount * 3; i += 3) {
+
+            positions[i] =
+                (Math.random() - 0.5) * 15;
+
+            positions[i + 1] =
+                (Math.random() - 0.5) * 10;
+
+            positions[i + 2] =
+                (Math.random() - 0.5) * 12;
+
+        }
+
+        const particleGeometry =
+            new THREE.BufferGeometry();
+
+        particleGeometry.setAttribute(
+            "position",
+            new THREE.BufferAttribute(
+                positions,
+                3
+            )
+        );
+
+        const particleMaterial =
+            new THREE.PointsMaterial({
+                color: 0x3b82f6,
+                size: 0.012,
+                transparent: true,
+                opacity: 0.55
+            });
+
+        const particles =
+            new THREE.Points(
+                particleGeometry,
+                particleMaterial
+            );
+
+        scene.add(particles);
+
+
+        /*
+         * WIREFRAME OBJECT
+         */
+
+        const geometry =
+            new THREE.IcosahedronGeometry(
+                2.4,
+                2
+            );
+
+        const material =
+            new THREE.MeshBasicMaterial({
+                color: 0x3b82f6,
+                wireframe: true,
+                transparent: true,
+                opacity: 0.055
+            });
+
+        const sphere =
+            new THREE.Mesh(
+                geometry,
+                material
+            );
+
+        scene.add(sphere);
+
+
+        /*
+         * SECOND INNER OBJECT
+         */
+
+        const innerGeometry =
+            new THREE.IcosahedronGeometry(
+                1.6,
+                1
+            );
+
+        const innerMaterial =
+            new THREE.MeshBasicMaterial({
+                color: 0xffffff,
+                wireframe: true,
+                transparent: true,
+                opacity: 0.025
+            });
+
+        const inner =
+            new THREE.Mesh(
+                innerGeometry,
+                innerMaterial
+            );
+
+        scene.add(inner);
+
+
+        /*
+         * MOUSE
+         */
+
+        let mouseX = 0;
+        let mouseY = 0;
+
+        document.addEventListener(
+            "mousemove",
+            (event) => {
+
+                mouseX =
+                    (event.clientX /
+                    window.innerWidth) -
+                    0.5;
+
+                mouseY =
+                    (event.clientY /
+                    window.innerHeight) -
+                    0.5;
+
+            }
+        );
+
+
+        /*
+         * ANIMATION
+         */
+
+        function animate() {
+
+            requestAnimationFrame(animate);
+
+            particles.rotation.y += 0.00025;
+            particles.rotation.x += 0.00005;
+
+            sphere.rotation.x += 0.00025;
+            sphere.rotation.y += 0.00045;
+
+            inner.rotation.x -= 0.0002;
+            inner.rotation.y -= 0.0003;
+
+            sphere.rotation.y +=
+                (mouseX * 0.08 -
+                sphere.rotation.y) * 0.002;
+
+            sphere.rotation.x +=
+                (mouseY * 0.08 -
+                sphere.rotation.x) * 0.002;
+
+            renderer.render(
+                scene,
+                camera
+            );
+        }
+
+        animate();
+
+
+        /*
+         * RESIZE
+         */
+
+        window.addEventListener(
+            "resize",
+            () => {
+
+                camera.aspect =
+                    window.innerWidth /
+                    window.innerHeight;
+
+                camera.updateProjectionMatrix();
+
+                renderer.setSize(
+                    window.innerWidth,
+                    window.innerHeight
+                );
+
+            }
+        );
+
+
+        /*
+         * TERMINAL CURSOR
+         */
+
+        setInterval(() => {
+
+            const cursor =
+                document.querySelector(
+                    ".terminal-cursor"
+                );
+
+            if (cursor) {
+                cursor.style.opacity =
+                    cursor.style.opacity === "0"
+                        ? "1"
+                        : "0";
+            }
+
+        }, 600);
+
+    </script>
+
+</body>
+</html>
