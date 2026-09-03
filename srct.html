@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AdFlow Pro Mockup</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'sans-serif'] },
+          colors: {
+            bg: '#090b14',
+            panel: '#121826',
+            panel2: '#1a2336',
+            line: 'rgba(255,255,255,.08)',
+            accent: '#8b5cf6',
+            accent2: '#22c55e',
+            accent3: '#06b6d4'
+          },
+          boxShadow: {
+            glow: '0 10px 40px rgba(139,92,246,.22)',
+            soft: '0 10px 35px rgba(0,0,0,.28)',
+            green: '0 10px 35px rgba(34,197,94,.16)'
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body{
+      font-family: Inter, sans-serif;
+      background:
+        radial-gradient(circle at 0% 0%, rgba(139,92,246,.22), transparent 25%),
+        radial-gradient(circle at 100% 0%, rgba(6,182,212,.18), transparent 25%),
+        linear-gradient(180deg,#090b14 0%,#0e1320 100%);
+    }
+    .glass{
+      background: rgba(18,24,38,.8);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+    .screen{ display:none; }
+    .screen.active{ display:block; animation: fade .28s ease; }
+    @keyframes fade{
+      from{ opacity:0; transform:translateY(10px); }
+      to{ opacity:1; transform:translateY(0); }
+    }
+    .shine{
+      position:relative;
+      overflow:hidden;
+    }
+    .shine::after{
+      content:"";
+      position:absolute;
+      top:0;
+      left:-130%;
+      width:70%;
+      height:100%;
+      background:linear-gradient(90deg,transparent,rgba(255,255,255,.14),transparent);
+      transform:skewX(-18deg);
+      animation: shine 3.2s infinite;
+    }
+    @keyframes shine{
+      0%{ left:-130%; }
+      55%,100%{ left:140%; }
+    }
+    .pulsey{
+      animation:pulsey 1.9s infinite;
+    }
+    @keyframes pulsey{
+      0%,100%{ transform:scale(1); box-shadow:0 0 0 0 rgba(139,92,246,.35); }
+      50%{ transform:scale(1.02); box-shadow:0 0 0 14px rgba(139,92,246,0); }
+    }
+    .floaty{
+      animation: floaty 3.5s ease-in-out infinite;
+    }
+    @keyframes floaty{
+      0%,100%{ transform:translateY(0px); }
+      50%{ transform:translateY(-4px); }
+    }
+    .hide-scrollbar::-webkit-scrollbar{ display:none; }
+    .hide-scrollbar{ -ms-overflow-style:none; scrollbar-width:none; }
+  </style>
+</head>
+<body class="text-white min-h-screen">
+  <div class="max-w-md mx-auto px-4 py-5 pb-28">
+
+    <!-- LOGIN -->
+    <section id="screen-login" class="screen active">
+      <div class="pt-8">
+        <div class="w-16 h-16 rounded-3xl bg-gradient-to-br from-violet-500 to-cyan-400 mx-auto flex items-center justify-center shadow-glow floaty">
+          <i data-lucide="zap" class="w-8 h-8 text-white"></i>
+        </div>
+        <h1 class="text-3xl font-black text-center mt-5">AdFlow</h1>
+        <p class="text-center text-slate-400 mt-2 text-sm">Mini sessiony. Mini rewardy. Maximum dopamine vibes.</p>
+
+        <div class="glass border border-white/10 rounded-3xl p-5 mt-6 shadow-soft">
+          <label class="block text-sm font-semibold text-slate-300 mb-2">Email</label>
+          <input value="denis@email.cz" class="w-full rounded-2xl bg-white/5 border border-white/10 px-4 py-3 outline-none mb-4">
+          <label class="block text-sm font-semibold text-slate-300 mb-2">Heslo</label>
+          <input type="password" value="12345678" class="w-full rounded-2xl bg-white/5 border border-white/10 px-4 py-3 outline-none">
+          <button onclick="showScreen('home')" class="mt-5 w-full rounded-2xl bg-gradient-to-r from-violet-600 to-fuchsia-500 py-4 font-black text-lg shadow-glow pulsey shine">
+            Přihlásit se
+          </button>
+          <button onclick="showScreen('home')" class="mt-3 w-full rounded-2xl bg-white/5 border border-white/10 py-3 font-bold">
+            Pokračovat jako host
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- HOME -->
+    <section id="screen-home" class="screen">
+      <header class="flex items-center justify-between mb-4">
+        <div>
+          <p class="text-[11px] uppercase tracking-[0.22em] text-violet-300 font-black">AdFlow</p>
+          <h1 class="text-2xl font-black leading-tight">Čau Denis 👋<br>ready na cash grind?</h1>
+        </div>
+        <button class="w-11 h-11 rounded-2xl glass border border-white/10 flex items-center justify-center">
+          <i data-lucide="bell" class="w-5 h-5 text-violet-200"></i>
+        </button>
+      </header>
+
+      <section class="glass border border-white/10 rounded-3xl p-4 shadow-glow mb-4">
+        <div class="flex items-start justify-between gap-3">
+          <div>
+            <p class="text-sm text-slate-300">Dnešní výdělek</p>
+            <div class="flex items-end gap-2 mt-1">
+              <span id="todayEarnings" class="text-4xl font-black">2,30 Kč</span>
+              <span class="text-emerald-400 text-sm font-bold mb-1">+18%</span>
+            </div>
+            <p class="text-xs text-slate-400 mt-1">Ještě 0,70 Kč do denního bonusu</p>
+          </div>
+          <div class="bg-emerald-500/10 border border-emerald-400/20 rounded-2xl px-3 py-2 text-center min-w-[86px]">
+            <div class="text-xs text-emerald-200">Streak</div>
+            <div class="text-2xl font-black">12</div>
+          </div>
+        </div>
+
+        <div class="mt-4">
+          <div class="flex justify-between text-xs text-slate-400 mb-2">
+            <span>Denní progres</span>
+            <span id="dailyProgressLabel">77%</span>
+          </div>
+          <div class="w-full h-3 bg-white/5 rounded-full overflow-hidden">
+            <div id="dailyProgressBar" class="h-full rounded-full bg-gradient-to-r from-violet-500 to-cyan-400" style="width:77%"></div>
+          </div>
+        </div>
+
+        <button onclick="showScreen('onboarding')" class="mt-4 w-full rounded-2xl bg-gradient-to-r from-violet-600 to-fuchsia-500 py-4 font-black text-lg shadow-glow pulsey shine">
+          Začít 3min session
+        </button>
+      </section>
+
+      <section class="grid grid-cols-3 gap-3 mb-4">
+        <div class="glass border border-white/10 rounded-2xl p-3">
+          <p class="text-xs text-slate-400">Celkem</p>
+          <p class="text-lg font-black mt-1">145 Kč</p>
+        </div>
+        <div class="glass border border-white/10 rounded-2xl p-3">
+          <p class="text-xs text-slate-400">Referral</p>
+          <p class="text-lg font-black mt-1">7,20 Kč</p>
+        </div>
+        <div class="glass border border-white/10 rounded-2xl p-3">
+          <p class="text-xs text-slate-400">Level</p>
+          <p class="text-lg font-black mt-1">7</p>
+        </div>
+      </section>
+
+      <section class="glass border border-white/10 rounded-3xl p-4 mb-4">
+        <div class="flex items-center justify-between mb-3">
+          <div>
+            <p class="font-bold">Rychlé režimy</p>
+            <p class="text-sm text-slate-400">Vyber si tempo</p>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <button onclick="startSession(3)" class="rounded-2xl bg-white/5 border border-white/10 p-4 text-left">
+            <p class="font-black">Quick</p>
+            <p class="text-xs text-slate-400 mt-1">3 reklamy • ~45s</p>
+          </button>
+          <button onclick="startSession(5)" class="rounded-2xl bg-emerald-500 text-slate-950 p-4 text-left shadow-green">
+            <p class="font-black">Pro</p>
+            <p class="text-xs mt-1 opacity-80">5 reklam • vyšší reward</p>
+          </button>
+        </div>
+      </section>
+
+      <section class="space-y-3">
+        <div class="glass border border-white/10 rounded-2xl p-4 flex items-center justify-between">
+          <div>
+            <p class="font-bold">Denní bonus</p>
+            <p class="text-sm text-slate-400">Ještě 2 session do extra odměny</p>
+          </div>
+          <div class="w-12 h-12 rounded-2xl bg-violet-500/15 flex items-center justify-center">
+            <i data-lucide="gift" class="w-5 h-5 text-violet-300"></i>
+          </div>
+        </div>
+
+        <div class="glass border border-white/10 rounded-2xl p-4 flex items-center justify-between">
+          <div>
+            <p class="font-bold">Referral boost</p>
+            <p class="text-sm text-slate-400">Pasivní mini odměny od pozvaných</p>
+          </div>
+          <button onclick="showScreen('referral')" class="rounded-xl bg-white text-slate-900 px-4 py-2 font-bold">
+            Pozvat
+          </button>
+        </div>
+      </section>
+    </section>
+
+    <!-- ONBOARDING -->
+    <section id="screen-onboarding" class="screen">
+      <header class="flex items-center justify-between mb-4">
+        <button onclick="showScreen('home')" class="w-11 h-11 rounded-2xl glass border border-white/10 flex items-center justify-center">
+          <i data-lucide="chevron-left" class="w-5 h-5"></i>
+        </button>
+        <p class="text-sm font-bold text-slate-300">Před startem</p>
+        <div class="w-11"></div>
+      </header>
+
+      <div class="glass border border-white/10 rounded-3xl p-5 shadow-soft">
+        <h2 class="text-2xl font-black">Připraveno za pár vteřin</h2>
+        <p class="text-sm text-slate-400 mt-2">F-pattern layout: top-left = reward, hned pod tím session start, potom status hooky.</p>
+
+        <div class="mt-5 space-y-3">
+          <label class="flex items-start gap-3 rounded-2xl bg-white/5 border border-white/10 p-4">
+            <input type="checkbox" checked class="mt-1 accent-violet-500">
+            <div>
+              <p class="font-bold">Krátké video reklamy</p>
+              <p class="text-sm text-slate-400">Rychlý rytmus, menší drop-off</p>
+            </div>
+          </label>
+          <label class="flex items-start gap-3 rounded-2xl bg-white/5 border border-white/10 p-4">
+            <input type="checkbox" checked class="mt-1 accent-violet-500">
+            <div>
+              <p class="font-bold">Denní bonus aktivní</p>
+              <p class="text-sm text-slate-400">Po session roste motivace vrátit se</p>
+            </div>
+          </label>
+          <label class="flex items-start gap-3 rounded-2xl bg-white/5 border border-white/10 p-4">
+            <input type="checkbox" checked class="mt-1 accent-violet-500">
+            <div>
+              <p class="font-bold">Leaderboard event</p>
+              <p class="text-sm text-slate-400">Light competition = vyšší retention</p>
+            </div>
+          </label>
+        </div>
+
+        <button onclick="startSession(5)" class="mt-5 w-full rounded-2xl bg-gradient-to-r from-violet-600 to-fuchsia-500 py-4 font-black text-lg shadow-glow">
+          Pokračovat do session
+        </button>
+      </div>
+    </section>
+
+    <!-- PLAYER -->
+    <section id="screen-player" class="screen">
+      <header class="flex items-center justify-between mb-4">
+        <button onclick="stopTimer(); showScreen('home')" class="w-11 h-11 rounded-2xl glass border border-white/10 flex items-center justify-center">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+        <div class="text-center">
+          <p class="text-xs uppercase tracking-[0.2em] text-violet-300 font-black">Session aktivní</p>
+          <p id="sessionCounterTop" class="text-sm font-bold text-slate-300">Reklama 1 / 5</p>
+        </div>
+        <div class="w-11 h-11 rounded-2xl glass border border-white/10 flex items-center justify-center">
+          <i data-lucide="timer" class="w-5 h-5 text-emerald-300"></i>
+        </div>
+      </header>
+
+      <div class="glass border border-white/10 rounded-3xl overflow-hidden shadow-green mb-4">
+        <div class="bg-gradient-to-r from-violet-600/20 to-cyan-500/10 px-4 py-3 border-b border-white/10 flex items-center justify-between">
+          <div>
+            <p class="text-xs uppercase tracking-wider text-violet-200 font-bold">Quick Watch Bonus</p>
+            <h2 id="adTitle" class="font-bold">Cloud storage pro týmy</h2>
+          </div>
+          <div class="text-right">
+            <p class="text-xs text-slate-400">Odměna</p>
+            <p id="adReward" class="font-extrabold text-emerald-400">+0,04 Kč</p>
+          </div>
+        </div>
+
+        <div class="p-4">
+          <div class="rounded-2xl bg-slate-900/70 border border-white/10 aspect-video flex items-center justify-center relative overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-br from-violet-500/20 via-transparent to-cyan-400/10"></div>
+            <div class="absolute top-3 left-3 flex gap-2">
+              <span class="px-2.5 py-1 rounded-full bg-white/10 border border-white/10 text-xs font-bold">Sponsored</span>
+              <span class="px-2.5 py-1 rounded-full bg-emerald-500/15 border border-emerald-400/20 text-xs font-bold text-emerald-300">High reward</span>
+            </div>
+            <div class="text-center z-10 px-4">
+              <div class="w-16 h-16 rounded-full bg-white/10 mx-auto flex items-center justify-center border border-white/10">
+                <i data-lucide="play" class="w-7 h-7 text-white"></i>
+              </div>
+              <p class="mt-3 font-semibold">Video placeholder</p>
+              <p id="adSubtitle" class="text-sm text-slate-400">15s • business SaaS • CTA ready</p>
+            </div>
+          </div>
+
+          <div class="mt-4 flex justify-between text-sm">
+            <span class="text-slate-300 font-medium">Postup sledování</span>
+            <span id="timerLabel" class="text-violet-300 font-bold">0s / 15s</span>
+          </div>
+          <div class="mt-2 w-full h-3 rounded-full bg-white/5 overflow-hidden">
+            <div id="adProgress" class="h-full rounded-full bg-gradient-to-r from-violet-500 to-cyan-400" style="width:0%"></div>
+          </div>
+
+          <div class="grid grid-cols-3 gap-3 mt-4">
+            <div class="rounded-2xl bg-white/5 border border-white/10 p-3">
+              <p class="text-xs text-slate-400">Session</p>
+              <p id="sessionReward" class="text-base font-black mt-1">0,00 Kč</p>
+            </div>
+            <div class="rounded-2xl bg-white/5 border border-white/10 p-3">
+              <p class="text-xs text-slate-400">Délka</p>
+              <p id="sessionLength" class="text-base font-black mt-1">0s</p>
+            </div>
+            <div class="rounded-2xl bg-white/5 border border-white/10 p-3">
+              <p class="text-xs text-slate-400">Počet</p>
+              <p id="sessionCounterSmall" class="text-base font-black mt-1">1/5</p>
+            </div>
+          </div>
+
+          <div class="mt-4 grid grid-cols-2 gap-3">
+            <button onclick="skipAd()" class="rounded-2xl bg-white/5 border border-white/10 py-3 font-semibold text-slate-200">
+              Přeskočit
+            </button>
+            <button id="nextBtn" onclick="nextAd()" disabled class="rounded-2xl bg-emerald-500/60 text-slate-950 py-3 font-black disabled:opacity-50">
+              Další reklama
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- COMPLETE -->
+    <section id="screen-complete" class="screen">
+      <div class="flex justify-center mb-4">
+        <div class="w-16 h-16 rounded-3xl bg-emerald-500/15 border border-emerald-400/20 flex items-center justify-center shadow-green">
+          <i data-lucide="party-popper" class="w-8 h-8 text-emerald-300"></i>
+        </div>
+      </div>
+
+      <div class="glass border border-white/10 rounded-3xl p-5 shadow-soft">
+        <p class="text-xs uppercase tracking-[0.22em] text-emerald-300 font-black">Session hotová</p>
+        <h2 class="text-3xl font-black mt-1">Nice one 🎉</h2>
+
+        <div class="mt-5 grid grid-cols-2 gap-3">
+          <div class="rounded-2xl bg-white/5 border border-white/10 p-4">
+            <p class="text-xs text-slate-400">Vyděláno</p>
+            <p id="completeReward" class="text-2xl font-black mt-1">0,20 Kč</p>
+          </div>
+          <div class="rounded-2xl bg-white/5 border border-white/10 p-4">
+            <p class="text-xs text-slate-400">Referral bonus</p>
+            <p class="text-2xl font-black mt-1 text-emerald-300">0,10 Kč</p>
+          </div>
+        </div>
+
+        <div class="mt-4 rounded-2xl bg-gradient-to-r from-violet-600/15 to-cyan-500/10 border border-white/10 p-4">
+          <p class="font-bold">Retention hook</p>
+          <p class="text-sm text-slate-400 mt-1">Ještě 1 session a unlockneš denní reward.</p>
+        </div>
+
+        <div class="mt-4 grid grid-cols-2 gap-3">
+          <button onclick="startSession(3)" class="rounded-2xl bg-white/5 border border-white/10 py-3 font-bold">
+            Ještě quick
+          </button>
+          <button onclick="showScreen('leaderboard')" class="rounded-2xl bg-white text-slate-900 py-3 font-black">
+            Mrknout žebříček
+          </button>
+        </div>
+
+        <button onclick="showScreen('home')" class="mt-3 w-full rounded-2xl bg-gradient-to-r from-violet-600 to-fuchsia-500 py-3 font-black">
+          Zpět domů
+        </button>
+      </div>
+    </section>
+
+    <!-- REFERRAL -->
+    <section id="screen-referral" class="screen">
+      <header class="flex items-center justify-between mb-4">
+        <button onclick="showScreen('home')" class="w-11 h-11 rounded-2xl glass border border-white/10 flex items-center justify-center">
+          <i data-lucide="chevron-left" class="w-5 h-5"></i>
+        </button>
+        <p class="text-sm font-bold text-slate-300">Referral</p>
+        <div class="w-11"></div>
+      </header>
+
+      <div class="glass border border-white/10 rounded-3xl p-5 shadow-soft mb-4">
+        <p class="text-xs uppercase tracking-[0.22em] text-violet-300 font-black">Pasivní boost</p>
+        <h2 class="text-2xl font-black mt-1">Pozvi kámoše</h2>
+        <p class="text-sm text-slate-400 mt-2">Referral screen pro mockup flow.</p>
+
+        <div class="mt-5 rounded-2xl bg-white/5 border border-white/10 p-4">
+          <p class="text-xs text-slate-400">Tvůj odkaz</p>
+          <div class="mt-2 flex items-center gap-2">
+            <input id="refLink" value="https://adflow.app/r/denis-8271" readonly class="flex-1 bg-transparent outline-none text-sm font-semibold text-white">
+            <button onclick="copyLink()" class="rounded-xl bg-white text-slate-900 px-4 py-2 font-bold">Kopírovat</button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-3 gap-3 mt-4">
+          <div class="rounded-2xl bg-white/5 border border-white/10 p-3">
+            <p class="text-xs text-slate-400">Kliky</p>
+            <p class="text-lg font-black mt-1">38</p>
+          </div>
+          <div class="rounded-2xl bg-white/5 border border-white/10 p-3">
+            <p class="text-xs text-slate-400">Signup</p>
+            <p class="text-lg font-black mt-1">11</p>
+          </div>
+          <div class="rounded-2xl bg-white/5 border border-white/10 p-3">
+            <p class="text-xs text-slate-400">Bonus</p>
+            <p class="text-lg font-black mt-1">7,20 Kč</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- LEADERBOARD -->
+    <section id="screen-leaderboard" class="screen">
+      <header class="flex items-center justify-between mb-4">
+        <button onclick="showScreen('home')" class="w-11 h-11 rounded-2xl glass border border-white/10 flex items-center justify-center">
+          <i data-lucide="chevron-left" class="w-5 h-5"></i>
+        </button>
+        <p class="text-sm font-bold text-slate-300">Leaderboard</p>
+        <div class="w-11"></div>
+      </header>
+
+      <div class="glass border border-white/10 rounded-3xl p-5 shadow-soft">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-xs uppercase tracking-[0.22em] text-amber-300 font-black">Týdenní event</p>
+            <h2 class="text-2xl font-black mt-1">Top referrals</h2>
+          </div>
+          <div class="rounded-2xl bg-amber-400/10 border border-amber-300/20 px-3 py-2 text-center">
+            <p class="text-xs text-amber-200">Místo</p>
+            <p class="text-2xl font-black">#14</p>
+          </div>
+        </div>
+
+        <div class="mt-5 space-y-3">
+          <div class="rounded-2xl bg-gradient-to-r from-yellow-400/20 to-amber-300/10 border border-yellow-300/20 p-4 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-2xl bg-yellow-300/20 flex items-center justify-center font-black">1</div>
+              <div>
+                <p class="font-bold">Marek</p>
+                <p class="text-sm text-slate-400">126 referrals</p>
+              </div>
+            </div>
+            <p class="font-black text-amber-300">+300 Kč</p>
+          </div>
+
+          <div class="rounded-2xl bg-white/5 border border-white/10 p-4 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-2xl bg-white/10 flex items-center justify-center font-black">2</div>
+              <div>
+                <p class="font-bold">Lucka</p>
+                <p class="text-sm text-slate-400">97 referrals</p>
+              </div>
+            </div>
+            <p class="font-black">+180 Kč</p>
+          </div>
+
+          <div class="rounded-2xl bg-white/5 border border-white/10 p-4 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-2xl bg-white/10 flex items-center justify-center font-black">3</div>
+              <div>
+                <p class="font-bold">Nikola</p>
+                <p class="text-sm text-slate-400">84 referrals</p>
+              </div>
+            </div>
+            <p class="font-black">+120 Kč</p>
+          </div>
+
+          <div class="rounded-2xl bg-violet-500/10 border border-violet-300/20 p-4 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-2xl bg-violet-400/20 flex items-center justify-center font-black">14</div>
+              <div>
+                <p class="font-bold">Denis</p>
+                <p class="text-sm text-slate-400">11 referrals</p>
+              </div>
+            </div>
+            <p class="font-black text-violet-300">+7,20 Kč</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- EARNINGS HISTORY -->
+    <section id="screen-history" class="screen">
+      <header class="flex items-center justify-between mb-4">
+        <button onclick="showScreen('home')" class="w-11 h-11 rounded-2xl glass border border-white/10 flex items-center justify-center">
+          <i data-lucide="chevron-left" class="w-5 h-5"></i>
+        </button>
+        <p class="text-sm font-bold text-slate-300">Historie</p>
+        <div class="w-11"></div>
+      </header>
+
+      <div class="glass border border-white/10 rounded-3xl p-5 shadow-soft">
+        <h2 class="text-2xl font-black">Earning history</h2>
+        <div class="mt-5 space-y-3">
+          <div class="rounded-2xl bg-white/5 border border-white/10 p-4 flex items-center justify-between">
+            <div>
+              <p class="font-bold">Pro session</p>
+              <p class="text-sm text-slate-400">Dnes • 14:08</p>
+            </div>
+            <p class="font-black text-emerald-300">+0,20 Kč</p>
+          </div>
+          <div class="rounded-2xl bg-white/5 border border-white/10 p-4 flex items-center justify-between">
+            <div>
+              <p class="font-bold">Referral bonus</p>
+              <p class="text-sm text-slate-400">Dnes • 12:42</p>
+            </div>
+            <p class="font-black text-emerald-300">+0,10 Kč</p>
+          </div>
+          <div class="rounded-2xl bg-white/5 border border-white/10 p-4 flex items-center justify-between">
+            <div>
+              <p class="font-bold">Quick session</p>
+              <p class="text-sm text-slate-400">Včera • 18:11</p>
+            </div>
+            <p class="font-black text-emerald-300">+0,12 Kč</p>
+          </div>
+          <div class="rounded-2xl bg-white/5 border border-white/10 p-4 flex items-center justify-between">
+            <div>
+              <p class="font-bold">Leaderboard mini bonus</p>
+              <p class="text-sm text-slate-400">Včera • 10:30</p>
+            </div>
+            <p class="font-black text-emerald-300">+1,00 Kč</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- NAV -->
+  <nav class="fixed bottom-4 left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] max-w-md glass border border-white/10 rounded-3xl p-3 flex justify-around z-50 shadow-soft">
+    <button onclick="showScreen('home')" class="flex flex-col items-center gap-1 text-violet-300">
+      <i data-lucide="house" class="w-5 h-5"></i>
+      <span class="text-[11px] font-semibold">Domů</span>
+    </button>
+    <button onclick="showScreen('history')" class="flex flex-col items-center gap-1 text-slate-400">
+      <i data-lucide="history" class="w-5 h-5"></i>
+      <span class="text-[11px] font-semibold">Historie</span>
+    </button>
+    <button onclick="showScreen('leaderboard')" class="flex flex-col items-center gap-1 text-slate-400">
+      <i data-lucide="trophy" class="w-5 h-5"></i>
+      <span class="text-[11px] font-semibold">Top</span>
+    </button>
+    <button onclick="showScreen('referral')" class="flex flex-col items-center gap-1 text-slate-400">
+      <i data-lucide="users" class="w-5 h-5"></i>
+      <span class="text-[11px] font-semibold">Referral</span>
+    </button>
+  </nav>
+
+  <script>
+    lucide.createIcons();
+
+    const ads = [
+      { title: "Cloud storage pro týmy", subtitle: "15s • business SaaS • CTA ready", reward: 0.04, duration: 15 },
+      { title: "AI nástroj pro freelancery", subtitle: "12s • productivity • onboarding offer", reward: 0.03, duration: 12 },
+      { title: "Karta s cashbackem", subtitle: "18s • fintech • landing test", reward: 0.05, duration: 18 },
+      { title: "VPN pro cestování", subtitle: "14s • security • app install", reward: 0.04, duration: 14 },
+      { title: "E-shop builder zdarma", subtitle: "16s • ecommerce • free trial", reward: 0.04, duration: 16 }
+    ];
+
+    let sessionAds = 5;
+    let currentAdIndex = 0;
+    let elapsed = 0;
+    let timer = null;
+    let sessionReward = 0;
+
+    function showScreen(name){
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.getElementById('screen-' + name).classList.add('active');
+      lucide.createIcons();
+    }
+
+    function startSession(count){
+      sessionAds = count;
+      currentAdIndex = 0;
+      sessionReward = 0;
+      elapsed = 0;
+      loadAd();
+      showScreen('player');
+      startTimer();
+    }
+
+    function loadAd(){
+      stopTimer();
+      elapsed = 0;
+      const ad = ads[currentAdIndex % ads.length];
+      document.getElementById('adTitle').textContent = ad.title;
+      document.getElementById('adSubtitle').textContent = ad.subtitle;
+      document.getElementById('adReward').textContent = '+' + ad.reward.toFixed(2).replace('.', ',') + ' Kč';
+      document.getElementById('sessionCounterTop').textContent = `Reklama ${currentAdIndex + 1} / ${sessionAds}`;
+      document.getElementById('sessionCounterSmall').textContent = `${currentAdIndex + 1}/${sessionAds}`;
+      document.getElementById('timerLabel').textContent = `0s / ${ad.duration}s`;
+      document.getElementById('adProgress').style.width = '0%';
+      document.getElementById('nextBtn').disabled = true;
+      document.getElementById('sessionReward').textContent = sessionReward.toFixed(2).replace('.', ',') + ' Kč';
+      document.getElementById('sessionLength').textContent = '0s';
+      startTimer();
+    }
+
+    function startTimer(){
+      stopTimer();
+      const ad = ads[currentAdIndex % ads.length];
+      timer = setInterval(() => {
+        elapsed++;
+        const progress = Math.min((elapsed / ad.duration) * 100, 100);
+        document.getElementById('adProgress').style.width = progress + '%';
+        document.getElementById('timerLabel').textContent = `${elapsed}s / ${ad.duration}s`;
+        document.getElementById('sessionLength').textContent = elapsed + 's';
+
+        if(elapsed >= ad.duration){
+          stopTimer();
+          document.getElementById('nextBtn').disabled = false;
+          sessionReward += ad.reward;
+          document.getElementById('sessionReward').textContent = sessionReward.toFixed(2).replace('.', ',') + ' Kč';
+        }
+      }, 1000);
+    }
+
+    function stopTimer(){
+      if(timer){
+        clearInterval(timer);
+        timer = null;
+      }
+    }
+
+    function nextAd(){
+      const ad = ads[currentAdIndex % ads.length];
+      if(elapsed < ad.duration) return;
+      currentAdIndex++;
+      if(currentAdIndex >= sessionAds){
+        finishSession();
+        return;
+      }
+      loadAd();
+    }
+
+    function skipAd(){
+      currentAdIndex++;
+      if(currentAdIndex >= sessionAds){
+        finishSession();
+        return;
+      }
+      loadAd();
+    }
+
+    function finishSession(){
+      stopTimer();
+      document.getElementById('completeReward').textContent = sessionReward.toFixed(2).replace('.', ',') + ' Kč';
+      const current = parseFloat(document.getElementById('todayEarnings').textContent.replace(' Kč','').replace(',','.'));
+      const updated = current + sessionReward;
+      document.getElementById('todayEarnings').textContent = updated.toFixed(2).replace('.', ',') + ' Kč';
+      const progress = Math.min(Math.round((updated / 3) * 100), 100);
+      document.getElementById('dailyProgressBar').style.width = progress + '%';
+      document.getElementById('dailyProgressLabel').textContent = progress + '%';
+      showScreen('complete');
+    }
+
+    function copyLink(){
+      const input = document.getElementById('refLink');
+      input.select();
+      input.setSelectionRange(0, 99999);
+      document.execCommand('copy');
+      alert('Odkaz zkopírován.');
+    }
+  </script>
+</body>
+</html>
